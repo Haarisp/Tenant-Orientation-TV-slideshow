@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plaza Latina — TV Orientation</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; background: #3F2518; }
+  .tv-wrap { background: #3F2518; font-family: 'DM Sans', Georgia, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+  .tv-topbar { display: flex; justify-content: space-between; align-items: center; padding: 24px 56px 0; }
+  .tv-logo-wrap { display: flex; flex-direction: column; line-height: 1; }
+  .tv-logo-pre { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #B8AFA5; margin-bottom: 5px; }
+  .tv-logo { color: #D4A843; font-family: Georgia, serif; font-style: italic; font-size: 38px; font-weight: 700; letter-spacing: 0.5px; }
+  .tv-lang { display: flex; border: 1px solid rgba(212,168,67,0.5); border-radius: 20px; overflow: hidden; }
+  .tv-lbtn { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; padding: 7px 18px; cursor: pointer; color: #B8AFA5; background: transparent; border: none; font-family: inherit; transition: all 0.2s; }
+  .tv-lbtn.on { background: #D4A843; color: #3F2518; font-weight: 600; }
+  .tv-slides { flex: 1; position: relative; }
+  .tv-slide { position: absolute; inset: 0; padding: 36px 56px 24px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transition: opacity 0.6s; pointer-events: none; }
+  .tv-slide.active { opacity: 1; pointer-events: all; }
+  .tv-slide-num { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: #D4A843; margin-bottom: 12px; }
+  .tv-slide-title { font-family: Georgia, serif; font-size: clamp(32px, 5vw, 56px); font-weight: 900; color: #FAF3E8; line-height: 1.15; margin-bottom: 22px; }
+  .tv-slide-title em { color: #D4A843; font-style: italic; }
+  .tv-divider { width: 56px; height: 3px; background: #D4A843; border-radius: 2px; margin-bottom: 24px; }
+  .tv-items { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tv-item { background: rgba(255,255,255,0.07); border: 1px solid rgba(212,168,67,0.2); border-radius: 6px; padding: 18px 22px; }
+  .tv-item-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #D4A843; margin-bottom: 8px; }
+  .tv-item-val { font-size: 18px; color: #FAF3E8; line-height: 1.6; }
+  .tv-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tv-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 18px; color: #FAF3E8; line-height: 1.55; }
+  .tv-list li::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #D4A843; flex-shrink: 0; margin-top: 9px; }
+  .tv-welcome-body { font-size: 22px; color: rgba(250,243,232,0.85); line-height: 1.85; max-width: 780px; margin-bottom: 32px; }
+  .tv-welcome-tags { display: flex; gap: 12px; flex-wrap: wrap; }
+  .tv-tag { background: rgba(212,168,67,0.15); border: 1px solid rgba(212,168,67,0.35); color: #D4A843; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 18px; border-radius: 20px; }
+  .tv-progress-wrap { padding: 0 56px 28px; display: flex; gap: 12px; align-items: center; }
+  .tv-progress-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .tv-progress-fill { height: 100%; background: #D4A843; border-radius: 2px; width: 0%; }
+  .tv-dots { display: flex; gap: 8px; }
+  .tv-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: background 0.2s; }
+  .tv-dot.on { background: #D4A843; }
+  .tv-nav { display: flex; gap: 8px; }
+  .tv-navbtn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #FAF3E8; font-size: 22px; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; font-family: inherit; }
+  .tv-navbtn:hover { background: rgba(212,168,67,0.25); }
+  .tv-table { width: 100%; border-collapse: collapse; }
+  .tv-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); vertical-align: top; font-size: 17px; color: #FAF3E8; line-height: 1.5; }
+  .tv-table td:first-child { color: #D4A843; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; width: 34%; padding-right: 20px; padding-top: 15px; }
+  .tv-table tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<div class="tv-wrap">
+  <div class="tv-topbar">
+    <div class="tv-logo-wrap">
+      <div class="tv-logo-pre">New Tenant Orientation</div>
+      <div class="tv-logo">Plaza Latina</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="tv-nav">
+        <button class="tv-navbtn" onclick="tvPrev()">&#8592;</button>
+        <button class="tv-navbtn" onclick="tvNext()">&#8594;</button>
+      </div>
+      <div class="tv-lang">
+        <button class="tv-lbtn on" id="tlb-en" onclick="tvLang('en')">EN</button>
+        <button class="tv-lbtn" id="tlb-es" onclick="tvLang('es')">ES</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tv-slides">
+
+    <div class="tv-slide active" id="tvs-0">
+      <div class="tv-slide-num" id="tsn-0"></div>
+      <div class="tv-slide-title" id="tst-0"></div>
+      <div class="tv-divider"></div>
+      <div class="tv-welcome-body" id="tsb-0"></div>
+      <div class="tv-welcome-tags" id="tsg-0"></div>
+    </div>
+
+    <div class="tv-slide" id="tvs-1">
+      <div class="tv-slide-num" id="tsn-1"></div>
+      <div class="tv-slide-title" id="tst-1"></div>
+      <div class="tv-divider"></div>
+      <div class="tv-items" id="tsi-1"></div>
+    </div>
+
+    <div class="tv-slide" id="tvs-2">
+      <div class="tv-slide-num" id="tsn-2"></div>
+      <div class="tv-slide-title" id="tst-2"></div>
+      <div class="tv-divider"></div>
+      <table class="tv-table" id="tst2-table"></table>
+    </div>
+
+    <div class="tv-slide" id="tvs-3">
+      <div class="tv-slide-num" id="tsn-3"></div>
+      <div class="tv-slide-title" id="tst-3"></div>
+      <div class="tv-divider"></div>
+      <ul class="tv-list" id="tscl-3"></ul>
+    </div>
+
+  </div>
+
+  <div class="tv-progress-wrap">
+    <div class="tv-dots">
+      <div class="tv-dot on" onclick="tvGo(0)"></div>
+      <div class="tv-dot" onclick="tvGo(1)"></div>
+      <div class="tv-dot" onclick="tvGo(2)"></div>
+      <div class="tv-dot" onclick="tvGo(3)"></div>
+    </div>
+    <div class="tv-progress-bar"><div class="tv-progress-fill" id="tv-fill"></div></div>
+    <span style="font-size:14px;color:#B8AFA5;letter-spacing:1px;" id="tv-counter">1 / 4</span>
+  </div>
+</div>
+
+<script>
+var tvCur = 0, tvTotal = 4, tvDur = 20000, tvRaf, tvStart;
+
+var tvStr = {
+  en: {
+    slides: [
+      {
+        num: '01 — Welcome',
+        title: 'Welcome to<br><em>Plaza Latina.</em>',
+        body: "This is your new home. We're glad you're here. Everything you need to get started is covered in this orientation — rent, signage, permits, and your move-in checklist.",
+        tags: ['Rent via AppFolio', 'Due 1st of month', 'Signage approval required', 'Health permit needed']
+      },
+      {
+        num: '02 — Rent & Hours',
+        title: 'Paying Rent &<br>Operating Hours',
+        items: [
+          ['Payment Portal', 'All rent through AppFolio only. Set up auto-pay to never miss a due date.'],
+          ['Due Date', 'First of every month. Late fees apply after the grace period.'],
+          ['Operating Hours', 'Thu & Mon 11AM–8PM<br>Fri–Sun 10AM–8PM'],
+          ['Must Stay Open', 'You must remain open during all plaza hours. Closures require written notice.']
+        ]
+      },
+      {
+        num: '03 — Signage & Rules',
+        title: 'Signage &<br>Key Rules',
+        rows: [
+          ['Design', 'Full creative freedom — neon, murals, illuminated signs all welcome'],
+          ['Approval', 'Submit mockup to management before ordering. Allow 3–5 business days.'],
+          ['Installation', 'Licensed contractor required. Provide proof of insurance.'],
+          ['Not Allowed', 'Strobe lights, signs on shared walls or parking lot'],
+          ['Parking', 'Outer lot edges only. Register vehicles. No double parking.'],
+          ['Subletting', 'Not permitted without written management consent']
+        ]
+      },
+      {
+        num: '04 — Your Checklist',
+        title: 'Move-In<br>Checklist',
+        list: [
+          'Sign & return lease agreement',
+          'Pay first month + security deposit',
+          'Set up AppFolio account & auto-pay',
+          'Complete move-in inspection',
+          'Obtain city/county business license',
+          'Pass health department inspection',
+          'Submit signage design for approval',
+          'Set up all utilities in your name',
+          'Confirm grease trap & service schedule',
+          'Provide certificate of insurance to mgmt'
+        ]
+      }
+    ]
+  },
+  es: {
+    slides: [
+      {
+        num: '01 — Bienvenida',
+        title: 'Bienvenido a<br><em>Plaza Latina.</em>',
+        body: 'Este es tu nuevo hogar. Nos alegra tenerte aquí. Todo lo que necesitas para comenzar está en esta orientación — renta, rótulos, permisos y tu lista de mudanza.',
+        tags: ['Renta por AppFolio', 'Vence el día 1', 'Aprobación de rótulo requerida', 'Permiso de salud necesario']
+      },
+      {
+        num: '02 — Renta y Horarios',
+        title: 'Pago de Renta y<br>Horario de Operación',
+        items: [
+          ['Portal de Pago', 'Toda la renta por AppFolio. Activa el pago automático para no perder fechas.'],
+          ['Fecha de Vencimiento', 'Primero de cada mes. Se aplican cargos por retraso.'],
+          ['Horario de Operación', 'Jue y Lun 11AM–8PM<br>Vie–Dom 10AM–8PM'],
+          ['Debes Permanecer Abierto', 'Debes operar durante todas las horas de la plaza. Los cierres requieren aviso escrito.']
+        ]
+      },
+      {
+        num: '03 — Rótulos y Reglas',
+        title: 'Rótulos y<br>Reglas Clave',
+        rows: [
+          ['Diseño', 'Libertad creativa total — neón, murales, rótulos iluminados permitidos'],
+          ['Aprobación', 'Envía boceto antes de ordenar. Permite 3–5 días hábiles.'],
+          ['Instalación', 'Contratista con licencia requerido. Entrega comprobante de seguro.'],
+          ['No Permitido', 'Luces estroboscópicas, rótulos en paredes compartidas o estacionamiento'],
+          ['Estacionamiento', 'Solo bordes exteriores. Registra vehículos. Sin doble fila.'],
+          ['Subarrendamiento', 'No permitido sin consentimiento escrito de la administración']
+        ]
+      },
+      {
+        num: '04 — Tu Lista',
+        title: 'Lista de<br>Verificación',
+        list: [
+          'Firmar y entregar contrato',
+          'Pagar primer mes + depósito',
+          'Crear cuenta AppFolio y auto-pago',
+          'Realizar inspección del local',
+          'Obtener licencia comercial municipal',
+          'Pasar inspección de salud',
+          'Enviar diseño de rótulo para aprobación',
+          'Contratar todos los servicios públicos',
+          'Confirmar trampa de grasa y servicio',
+          'Entregar certificado de seguro a la admin'
+        ]
+      }
+    ]
+  }
+};
+
+function tvRender(lang) {
+  var s = tvStr[lang].slides;
+  s.forEach(function(sl, i) {
+    document.getElementById('tsn-'+i).innerHTML = sl.num;
+    document.getElementById('tst-'+i).innerHTML = sl.title;
+    if (i === 0) {
+      document.getElementById('tsb-0').textContent = sl.body;
+      var tags = document.getElementById('tsg-0');
+      tags.innerHTML = '';
+      sl.tags.forEach(function(t) { tags.innerHTML += '<span class="tv-tag">'+t+'</span>'; });
+    }
+    if (i === 1) {
+      var items = document.getElementById('tsi-1');
+      items.innerHTML = '';
+      sl.items.forEach(function(it) {
+        items.innerHTML += '<div class="tv-item"><div class="tv-item-label">'+it[0]+'</div><div class="tv-item-val">'+it[1]+'</div></div>';
+      });
+    }
+    if (i === 2) {
+      var tbl = document.getElementById('tst2-table');
+      tbl.innerHTML = '';
+      sl.rows.forEach(function(r) {
+        tbl.innerHTML += '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';
+      });
+    }
+    if (i === 3) {
+      var lst = document.getElementById('tscl-3');
+      lst.innerHTML = '';
+      sl.list.forEach(function(li) { lst.innerHTML += '<li>'+li+'</li>'; });
+    }
+  });
+}
+
+function tvShow(n) {
+  document.querySelectorAll('.tv-slide').forEach(function(s, i) { s.classList.toggle('active', i === n); });
+  document.querySelectorAll('.tv-dot').forEach(function(d, i) { d.classList.toggle('on', i === n); });
+  document.getElementById('tv-counter').textContent = (n+1) + ' / ' + tvTotal;
+  tvCur = n;
+  tvStartTimer();
+}
+
+function tvStartTimer() {
+  cancelAnimationFrame(tvRaf);
+  tvStart = performance.now();
+  var fill = document.getElementById('tv-fill');
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  function tick(now) {
+    var pct = Math.min(100, (now - tvStart) / tvDur * 100);
+    fill.style.width = pct + '%';
+    if (pct < 100) { tvRaf = requestAnimationFrame(tick); }
+    else { tvNext(); }
+  }
+  tvRaf = requestAnimationFrame(tick);
+}
+
+function tvNext() { tvShow((tvCur + 1) % tvTotal); }
+function tvPrev() { tvShow((tvCur + tvTotal - 1) % tvTotal); }
+function tvGo(n) { tvShow(n); }
+
+function tvLang(lang) {
+  tvRender(lang);
+  document.getElementById('tlb-en').classList.toggle('on', lang === 'en');
+  document.getElementById('tlb-es').classList.toggle('on', lang === 'es');
+}
+
+tvRender('en');
+tvShow(0);
+</script>
+
+</body>
+</html>
